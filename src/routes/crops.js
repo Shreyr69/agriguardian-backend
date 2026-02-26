@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const cropController = require('../controllers/cropController');
+const { validateMongoId } = require('../validators/commonValidator');
+const { validate } = require('../middleware/validator');
 
 // Public routes - anyone can view crops
 router.get('/', cropController.getAllCrops);
-router.get('/:id', cropController.getCropById);
+router.get('/:id', validateMongoId('id'), validate, cropController.getCropById);
 
 module.exports = router;

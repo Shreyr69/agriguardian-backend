@@ -3,6 +3,8 @@ const router = express.Router();
 const multer = require('multer');
 const userController = require('../controllers/userController');
 const authMiddleware = require('../middleware/auth');
+const { validateMongoId } = require('../validators/commonValidator');
+const { validate } = require('../middleware/validator');
 
 // Configure multer for memory storage
 const upload = multer({
@@ -30,7 +32,7 @@ router.post('/profile/upload-image', upload.single('profileImage'), userControll
 // User crops
 router.get('/crops', userController.getUserCrops);
 router.post('/crops', userController.addUserCrop);
-router.put('/crops/:id', userController.updateUserCrop);
-router.delete('/crops/:id', userController.deleteUserCrop);
+router.put('/crops/:id', validateMongoId('id'), validate, userController.updateUserCrop);
+router.delete('/crops/:id', validateMongoId('id'), validate, userController.deleteUserCrop);
 
 module.exports = router;
